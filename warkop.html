@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warkop Saban Kala</title>
+    <link rel="stylesheet" href="navbar.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="brand">warkop saban kala</div>
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#profil">Profil</a>
+            <a href="#menu">Menu</a>
+            <a href="porto.html">Porto</a>
+            <a href="#kontak">Kontak</a>
+        </nav>
+        <div class="navbar-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Search...">
+                <button type="button">Cari</button>
+            </div>
+            <a href="login.html" class="login-link">Login</a>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <h2>Selamat Datang di Warkop Saban Kala</h2>
+        <p>
+            Warkop Saban Kala adalah tempat yang sempurna untuk menikmati kopi berkualitas tinggi dengan suasana yang nyaman dan hangat.
+            Kami menyajikan berbagai pilihan kopi dari berbagai daerah dengan teknik pembuatan tradisional dan modern.
+            Nikmati pengalaman bersantai sambil menikmati secangkir kopi terbaik.
+        </p>
+        <a href="#menu" class="order-btn">Pesan Sekarang</a>
+    </section>
+
+    <section class="content-section" id="profil">
+        <div class="section-title">
+            <span>Profil</span>
+            <h3>Tentang Kami</h3>
+        </div>
+        <div class="profile-card">
+            <p>
+                Warkop Saban Kala sudah lama dikenal sebagai tempat nongkrong favorit bagi pencinta kopi dan makanan ringan.
+                Kami fokus pada kualitas rasa, pelayanan hangat, dan suasana yang cocok untuk berkumpul.
+            </p>
+        </div>
+    </section>
+
+    <section class="content-section menu-section" id="menu">
+        <div class="section-title">
+            <span>Menu</span>
+            <h3>Pesan yang kamu suka</h3>
+        </div>
+
+        <div class="menu-scroll">
+            <div class="product-card">
+                <div class="product-image kopi"></div>
+                <h4>Kopi Hitam</h4>
+                <p>Espresso + susu segar</p>
+                <div class="product-footer">
+                    <strong>Rp 15.000</strong>
+                    <button class="add-btn" onclick="addToCart('Kopi Hitam', 15000)">+ Pesan</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image latte"></div>
+                <h4>Cafe Latte</h4>
+                <p>Rasa creamy dan harum</p>
+                <div class="product-footer">
+                    <strong>Rp 18.000</strong>
+                    <button class="add-btn" onclick="addToCart('Cafe Latte', 18000)">+ Pesan</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image matcha"></div>
+                <h4>Matcha Latte</h4>
+                <p>Matcha premium tanpa takut</p>
+                <div class="product-footer">
+                    <strong>Rp 20.000</strong>
+                    <button class="add-btn" onclick="addToCart('Matcha Latte', 20000)">+ Pesan</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image nasi"></div>
+                <h4>Nasi Goreng</h4>
+                <p>Pedas gurih favorit</p>
+                <div class="product-footer">
+                    <strong>Rp 22.000</strong>
+                    <button class="add-btn" onclick="addToCart('Nasi Goreng', 22000)">+ Pesan</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image roti"></div>
+                <h4>Roti Bakar</h4>
+                <p>Manis, hangat, dan nikmat</p>
+                <div class="product-footer">
+                    <strong>Rp 12.000</strong>
+                    <button class="add-btn" onclick="addToCart('Roti Bakar', 12000)">+ Pesan</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-panel">
+            <h4>Keranjang Belanja</h4>
+            <ul id="cartList">
+                <li>Belum ada pesanan</li>
+            </ul>
+            <div class="cart-total">
+                Total: <span id="cartTotal">Rp 0</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" id="kontak">
+        <div class="section-title">
+            <span>Kontak</span>
+            <h3>Hubungi Kami</h3>
+        </div>
+        <div class="profile-card contact-card">
+            <p><strong>Alamat:</strong> Warkop Saban Kala (Jl. Perumahan Mutiara Indah No.44 Ruko, Blok A, Unyur, Kota Serang)</p>
+            <p><strong>WhatsApp:</strong> 0812-3456-7890</p>
+            <p><strong>Jam Buka:</strong> 06.00 - 22.00</p>
+        </div>
+    </section>
+
+    <script>
+        const cart = [];
+        const cartList = document.getElementById('cartList');
+        const cartTotal = document.getElementById('cartTotal');
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            renderCart();
+        }
+
+        function renderCart() {
+            if (cart.length === 0) {
+                cartList.innerHTML = '<li>Belum ada pesanan</li>';
+                cartTotal.textContent = 'Rp 0';
+                return;
+            }
+
+            cartList.innerHTML = '';
+            let total = 0;
+            cart.forEach((item) => {
+                total += item.price;
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - Rp ${item.price.toLocaleString('id-ID')}`;
+                cartList.appendChild(li);
+            });
+            cartTotal.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+    </script>
+</body>
+</html>

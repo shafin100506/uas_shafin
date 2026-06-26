@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buat Akun</title>
+    <link
+      href="vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body class="login-page">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="text-center mb-4">
+          <h2 class="fw-bold mb-1">Buat Akun</h2>
+          <p class="text-muted mb-0">Daftar sekarang untuk mulai menggunakan akun</p>
+        </div>
+
+        <form id="registerForm">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Masukkan email"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="registerUsername" class="form-label">Username</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-person"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                id="registerUsername"
+                placeholder="Masukkan username"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="registerPassword" class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input
+                type="password"
+                class="form-control"
+                id="registerPassword"
+                placeholder="Masukkan password"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mb-3">Daftar</button>
+
+          <div class="text-center">
+            <span class="text-muted">Sudah punya akun?</span>
+            <a href="login.html" class="ms-1 create-account">Masuk</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Informasi</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="registerMessage"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const registerForm = document.getElementById('registerForm');
+      const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+      const registerMessage = document.getElementById('registerMessage');
+
+      registerForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const username = document.getElementById('registerUsername').value.trim();
+        const password = document.getElementById('registerPassword').value;
+
+        if (!email || !username || !password) {
+          registerMessage.textContent = 'Semua data wajib diisi.';
+          registerModal.show();
+          return;
+        }
+
+        const users = JSON.parse(localStorage.getItem('fakeUsers') || '[]');
+        const exists = users.some((item) => item.username === username || item.email === email);
+
+        if (exists) {
+          registerMessage.textContent = 'Username atau email sudah terdaftar.';
+          registerModal.show();
+          return;
+        }
+
+        users.push({ email, username, password });
+        localStorage.setItem('fakeUsers', JSON.stringify(users));
+        registerMessage.textContent = 'Selamat! Akun berhasil dibuat.';
+        registerForm.reset();
+        registerModal.show();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lupa Password</title>
+    <link
+      href="vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body class="login-page">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="text-center mb-4">
+          <h2 class="fw-bold mb-1">Lupa Password</h2>
+          <p class="text-muted mb-0">Masukkan data akun untuk reset password</p>
+        </div>
+
+        <form id="forgotForm">
+          <div class="mb-3">
+            <label for="forgotEmail" class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <input
+                type="email"
+                class="form-control"
+                id="forgotEmail"
+                placeholder="Masukkan email"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="forgotUsername" class="form-label">Username</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-person"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                id="forgotUsername"
+                placeholder="Masukkan username"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">Password Baru</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input
+                type="password"
+                class="form-control"
+                id="newPassword"
+                placeholder="Masukkan password baru"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-lock-fill"></i>
+              </span>
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                placeholder="Ulangi password baru"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mb-3">Reset Password</button>
+
+          <div class="text-center">
+            <a href="login.html" class="create-account">Kembali ke login</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal fade" id="forgotModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Informasi</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="forgotMessage"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const forgotForm = document.getElementById('forgotForm');
+      const forgotModal = new bootstrap.Modal(document.getElementById('forgotModal'));
+      const forgotMessage = document.getElementById('forgotMessage');
+
+      forgotForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById('forgotEmail').value.trim();
+        const username = document.getElementById('forgotUsername').value.trim();
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (!email || !username || !newPassword || !confirmPassword) {
+          forgotMessage.textContent = 'Semua data wajib diisi.';
+          forgotModal.show();
+          return;
+        }
+
+        if (newPassword !== confirmPassword) {
+          forgotMessage.textContent = 'Konfirmasi password tidak cocok.';
+          forgotModal.show();
+          return;
+        }
+
+        const users = JSON.parse(localStorage.getItem('fakeUsers') || '[]');
+        const userIndex = users.findIndex(
+          (item) => item.email === email && item.username === username
+        );
+
+        if (userIndex === -1) {
+          forgotMessage.textContent = 'Email atau username tidak ditemukan.';
+          forgotModal.show();
+          return;
+        }
+
+        users[userIndex].password = newPassword;
+        localStorage.setItem('fakeUsers', JSON.stringify(users));
+        forgotForm.reset();
+        forgotMessage.textContent = 'Password berhasil diubah.';
+        forgotModal.show();
+      });
+    </script>
+  </body>
+</html>
